@@ -11,15 +11,6 @@ const getConnection = async () => {
         password: process.env.DB_PASSWORD,
         database: process.env.DB_NAME,
     });
-    try {
-        const [results, fields] = await connection.query('SELECT * FROM users');
-        console.log("results", results);
-        console.log("fields", fields);
-
-    } catch (error) {
-        console.log(error);
-
-    }
 }
 
 

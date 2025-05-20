@@ -5,6 +5,9 @@ import webRoutes from './routes/web'
 import getConnection from './config/database'
 const app = express()
 
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 //config view engine
 app.set('view engine', 'ejs')
 app.set('views', __dirname + '/views')
