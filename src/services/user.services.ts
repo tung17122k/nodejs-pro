@@ -14,8 +14,8 @@ const getAllUsers = async () => {
 }
 
 
-const handleCreateUser = async (fullName: string, userName: string, address: string, phone: string, avatar: string, role: string) => {
-    const defaultPassword = await bcrypt.hash("123456", saltRounds)
+const handleCreateUser = async (fullName: string, userName: string, address: string, password: string, avatar: string, phone: string, role: string) => {
+    const defaultPassword = await bcrypt.hash(password, saltRounds)
     try {
         const newUser = await prisma.user.create({
             data: {
@@ -44,7 +44,7 @@ const handleGetUserById = async (id: number) => {
     })
 }
 
-const handleUpdateUser = async (id: string, fullName: string, UserName: string, address: string) => {
+const handleUpdateUser = async (id: string, fullName: string, address: string, avatar: string, phone: string, roleId) => {
     try {
         const updateUser = await prisma.user.update({
             where: {
@@ -52,8 +52,10 @@ const handleUpdateUser = async (id: string, fullName: string, UserName: string, 
             },
             data: {
                 fullName: fullName,
-                userName: UserName,
-                address: address
+                address: address,
+                phone: phone,
+                roleId: +roleId,
+                ...(avatar !== undefined && { avatar: avatar }),
             },
         })
         return updateUser
