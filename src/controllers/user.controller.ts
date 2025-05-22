@@ -23,7 +23,7 @@ const postCreateUser = async (req: Request, res: Response) => {
     const { fullName, userName, address, phone, role } = req.body
     const file = req.file;
     const avatar = file?.filename ?? null;
-    const result = await handleCreateUser(fullName, userName, address, phone, avatar)
+    const result = await handleCreateUser(fullName, userName, address, phone, avatar, role)
 }
 
 const putUpdateUser = async (req: Request, res: Response) => {

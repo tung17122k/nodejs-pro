@@ -1,24 +1,13 @@
+import { hashPassword } from "../services/user.services";
 import { prisma } from "./client"
+import { ACCOUNT_TYPE } from "./constant";
 
 const initDatabase = async () => {
     const count = await prisma.user.count();
     const countRole = await prisma.role.count();
-    if (count === 0) {
-        await prisma.user.createMany({
-            data: [
-                {
-                    userName: 'Tung',
-                    password: '123456',
-                    accountType: 'SYSTEM'
-                },
-                {
-                    userName: 'Tung2',
-                    password: '1234567',
-                    accountType: 'SYSTEM'
-                }
-            ]
-        })
-    } else if (countRole === 0) {
+    const defaultPassword = await hashPassword("123456")
+
+    if (countRole === 0) {
         await prisma.role.createMany({
             data: [
                 {
@@ -31,12 +20,34 @@ const initDatabase = async () => {
                 }
             ]
         })
-
-    } else {
-        console.log("Database already seeded");
-
     }
-
+    if (count === 0) {
+        const adminRole = await prisma.role.findFirst({
+            where: { name: "ADMIN" }
+        })
+        if (adminRole)
+            await prisma.user.createMany({
+                data: [
+                    {
+                        fullName: 'Admin',
+                        userName: 'Tung',
+                        password: defaultPassword,
+                        accountType: ACCOUNT_TYPE.SYSTEM,
+                        roleId: adminRole.id,
+                    },
+                    {
+                        fullName: "Admin",
+                        userName: 'Tung2',
+                        password: defaultPassword,
+                        accountType: ACCOUNT_TYPE.SYSTEM,
+                        roleId: adminRole.id,
+                    }
+                ]
+            })
+    }
+    if (countRole === 0 && count === 0) {
+        console.log("Database already seeded");
+    }
 }
 
 export default initDatabase

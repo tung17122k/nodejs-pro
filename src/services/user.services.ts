@@ -1,7 +1,12 @@
 import { prisma } from "../config/client"
 import { ACCOUNT_TYPE } from "../config/constant";
+import bcrypt from "bcrypt";
+const saltRounds = 10;
 
 
+const hashPassword = async (password: string) => {
+    return await bcrypt.hash(password, saltRounds);
+}
 
 const getAllUsers = async () => {
     const users = await prisma.user.findMany();
@@ -9,18 +14,19 @@ const getAllUsers = async () => {
 }
 
 
-const handleCreateUser = async (fullName: string, userName: string, address: string, phone: string, avatar) => {
-
+const handleCreateUser = async (fullName: string, userName: string, address: string, phone: string, avatar: string, role: string) => {
+    const defaultPassword = await bcrypt.hash("123456", saltRounds)
     try {
         const newUser = await prisma.user.create({
             data: {
                 fullName: fullName,
                 userName: userName,
                 address: address,
-                password: "123456",
+                password: defaultPassword,
                 accountType: ACCOUNT_TYPE.SYSTEM,
                 avatar: avatar,
                 phone: phone,
+                roleId: +role
             }
         })
         return newUser
@@ -72,4 +78,4 @@ const handleDeleteUser = async (id: number) => {
 }
 
 
-export { handleCreateUser, getAllUsers, handleUpdateUser, handleGetUserById, handleDeleteUser }
+export { handleCreateUser, getAllUsers, handleUpdateUser, handleGetUserById, handleDeleteUser, hashPassword }
