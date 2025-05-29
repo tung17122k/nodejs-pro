@@ -6,6 +6,8 @@ import getConnection from './config/database'
 import initDatabase from './config/seed'
 const app = express()
 
+
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
