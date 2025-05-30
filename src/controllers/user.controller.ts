@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { handleCreateUser, getAllUsers, handleUpdateUser, handleGetUserById, handleDeleteUser } from "../services/user.services";
+import { handleCreateUser, getAllUsers, handleUpdateUser, handleGetUserById, handleDeleteUser, handleRegister } from "../services/user.services";
+import { RegisterSchema, TRegisterSchema } from "../validation/register.schema";
 
 const getHomePage = async (req: Request, res: Response) => {
     const users = await getAllUsers();
@@ -97,4 +98,45 @@ const postCreateFile = async (req: Request, res: Response) => {
     }
 }
 
-export { getHomePage, postCreateUser, putUpdateUser, getUserById, deleteUser, postCreateFile }
+const postRegister = async (req: Request, res: Response) => {
+    const { fullName, email, password, confirmPassword } = req.body as TRegisterSchema;
+    console.log("Register data:", req.body);
+
+    try {
+        const validate = await RegisterSchema.safeParseAsync(req.body);
+        if (!validate.success) {
+            const errorsZod = validate.error.issues;
+            const errors = errorsZod?.map((error) => {
+                return {
+                    field: error.path.join('.'),
+                    message: error.message
+                }
+            })
+            res.status(400).json({
+                message: "Validation error",
+                errors: errors
+            });
+        } else {
+            const result = await handleRegister(fullName, email, password);
+            if (result) {
+                res.status(200).json({
+                    message: "User registered successfully",
+                    data: result
+                });
+            } else {
+                res.status(400).json({
+                    message: "User registration failed"
+                });
+            }
+        }
+    } catch (error) {
+        console.log("Validation error:", error);
+        res.status(500).json({
+            message: "Internal server error"
+        });
+
+    }
+
+}
+
+export { getHomePage, postCreateUser, putUpdateUser, getUserById, deleteUser, postCreateFile, postRegister }

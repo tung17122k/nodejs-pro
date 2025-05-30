@@ -80,4 +80,42 @@ const handleDeleteUser = async (id: number) => {
 }
 
 
-export { handleCreateUser, getAllUsers, handleUpdateUser, handleGetUserById, handleDeleteUser, hashPassword }
+const isEmailExist = async (email: string) => {
+    const user = await prisma.user.findUnique({
+        where: {
+            userName: email
+        }
+    })
+    if (user) {
+        return true
+    } else {
+        return false
+    }
+}
+
+const handleRegister = async (fullName: string, email: string, password: string) => {
+    const defaultPassword = await bcrypt.hash(password, saltRounds)
+    const userRole = await prisma.role.findUnique({
+        where: {
+            name: "USER"
+        }
+    })
+    try {
+        const newUser = await prisma.user.create({
+            data: {
+                fullName: fullName,
+                userName: email,
+                password: defaultPassword,
+                accountType: ACCOUNT_TYPE.SYSTEM,
+                phone: "0392293333",
+                roleId: userRole.id
+            }
+        })
+        return newUser
+    } catch (error) {
+        console.log("error", error);
+        throw new Error("Database error: Failed to register user");
+    }
+}
+
+export { handleCreateUser, getAllUsers, handleUpdateUser, handleGetUserById, handleDeleteUser, hashPassword, isEmailExist, handleRegister }

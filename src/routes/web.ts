@@ -1,5 +1,5 @@
 import express, { Express } from 'express';
-import { getHomePage, postCreateUser, putUpdateUser, getUserById, deleteUser, postCreateFile } from '../controllers/user.controller';
+import { getHomePage, postCreateUser, putUpdateUser, getUserById, deleteUser, postCreateFile, postRegister } from '../controllers/user.controller';
 import fileUploadMiddleware from '../middleware/multer';
 import { postCreateProduct, putUpdateProduct, getProduct, deleteProduct, getProductById } from '../controllers/product.controller';
 
@@ -25,6 +25,8 @@ const webRoutes = (app: Express) => {
     router.delete('/product/:id', deleteProduct);
 
     router.get('/product/:id', getProductById)
+
+    router.post('/register', postRegister);
 
     app.use('/', router);
 };
