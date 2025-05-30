@@ -62,6 +62,20 @@ const handleGetProduct = async () => {
     }
 }
 
+const handleDeleteProduct = async (id: number) => {
+    try {
+        const deletedProduct = await prisma.product.delete({
+            where: {
+                id: id
+            }
+        })
+        return deletedProduct
+    } catch (error) {
+        console.log(">>>>>>error", error)
+        throw new Error("Error deleting product")
+    }
+}
+
 export {
-    handleCreateProduct, handlePutUpdateProduct, handleGetProduct
+    handleCreateProduct, handlePutUpdateProduct, handleGetProduct, handleDeleteProduct
 }
