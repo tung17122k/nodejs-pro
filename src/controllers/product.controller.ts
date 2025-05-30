@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { handleCreateProduct } from "../services/product.services";
+import { handleCreateProduct, handlePutUpdateProduct } from "../services/product.services";
 import { ProductSchema, TProductSchema } from "../validation/product.schema";
 
 const postCreateProduct = async (req: Request, res: Response) => {
@@ -26,7 +26,7 @@ const postCreateProduct = async (req: Request, res: Response) => {
         if (validate.success) {
             const file = req.file;
             const image = file?.filename ?? null;
-            const result = await handleCreateProduct(name, +price, detailDesc, +quantity, sold, factory, target, image)
+            const result = await handleCreateProduct(name, +price, detailDesc, +quantity, +sold, factory, target, image)
             if (result) {
                 res.status(200).json({
                     message: "Product created successfully",
@@ -43,6 +43,43 @@ const postCreateProduct = async (req: Request, res: Response) => {
 
 }
 
+const putUpdateProduct = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const { name, price, detailDesc, quantity, sold, factory, target } = req.body as TProductSchema;
+        const validate = ProductSchema.safeParse(req.body);
+        if (validate.success === false) {
+            //error 
+            const errorsZod = validate.error.issues;
+            console.log(">>>>errorsZod", errorsZod);
+            const errors = errorsZod?.map((error) => {
+                return {
+                    field: error.path.join('.'),
+                    message: error.message
+                }
+            })
+            res.status(400).json({
+                message: "Validation error",
+                errors: errors
+            });
+        } else {
+            const file = req.file;
+            const image = file?.filename ?? null;
+            const result = await handlePutUpdateProduct(+id, name, +price, detailDesc, +quantity, +sold, factory, target, image)
+            if (result) {
+                res.status(200).json({
+                    message: "Product created successfully",
+                    data: result
+                });
+            }
+        }
+
+    } catch (error) {
+
+    }
+}
+
+
 export {
-    postCreateProduct
+    postCreateProduct, putUpdateProduct
 }
