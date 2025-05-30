@@ -76,6 +76,20 @@ const handleDeleteProduct = async (id: number) => {
     }
 }
 
+const handleGetProductById = async (id: number) => {
+    try {
+        const product = await prisma.product.findUnique({
+            where: {
+                id: id
+            }
+        })
+        return product
+    } catch (error) {
+        console.log(">>>>>>error", error)
+        throw new Error("Error getting product by id")
+    }
+}
+
 export {
-    handleCreateProduct, handlePutUpdateProduct, handleGetProduct, handleDeleteProduct
+    handleCreateProduct, handlePutUpdateProduct, handleGetProduct, handleDeleteProduct, handleGetProductById
 }

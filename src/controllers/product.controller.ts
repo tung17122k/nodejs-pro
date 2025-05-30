@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { handleCreateProduct, handlePutUpdateProduct, handleGetProduct, handleDeleteProduct } from "../services/product.services";
+import { handleCreateProduct, handlePutUpdateProduct, handleGetProduct, handleDeleteProduct, handleGetProductById } from "../services/product.services";
 import { ProductSchema, TProductSchema } from "../validation/product.schema";
 
 const postCreateProduct = async (req: Request, res: Response) => {
@@ -115,7 +115,28 @@ const deleteProduct = async (req: Request, res: Response) => {
     }
 }
 
+const getProductById = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    if (!id) {
+        res.status(400).json({
+            message: "Product ID is required"
+        });
+    }
+    try {
+        const product = await handleGetProductById(+id);
+        res.status(200).json({
+            message: "Get product successfully",
+            data: product
+        });
+    } catch (error) {
+        console.log("error", error);
+        res.status(500).json({
+            message: "Error getting product"
+        });
+    }
+}
+
 
 export {
-    postCreateProduct, putUpdateProduct, getProduct, deleteProduct
+    postCreateProduct, putUpdateProduct, getProduct, deleteProduct, getProductById
 }
