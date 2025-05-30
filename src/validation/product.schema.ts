@@ -13,7 +13,11 @@ export const ProductSchema = z.object({
         .refine((num) => num > 0, {
             message: "Số lượng tối thiểu là 1",
         }),
-    sold: z.string().trim().min(1, { message: "Sold is required" }),
+    sold: z.string()
+        .transform((val) => (val === "" ? 0 : Number(val)))
+        .refine((num) => num >= 0, {
+            message: "Đã bán được thiểu là 0",
+        }),
     factory: z.string().trim().min(1, { message: "Factory is required" }),
     target: z.string().trim().min(1, { message: "Target is required" }),
 });
