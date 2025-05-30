@@ -26,7 +26,7 @@ const postCreateProduct = async (req: Request, res: Response) => {
         if (validate.success) {
             const file = req.file;
             const image = file?.filename ?? null;
-            const result = await handleCreateProduct(name, price, detailDesc, quantity, sold, factory, target, image)
+            const result = await handleCreateProduct(name, +price, detailDesc, +quantity, sold, factory, target, image)
             if (result) {
                 res.status(200).json({
                     message: "Product created successfully",
