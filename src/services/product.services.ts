@@ -47,6 +47,21 @@ const handlePutUpdateProduct = async (id: number, name: string, price: number, d
     }
 }
 
+const handleGetProduct = async () => {
+    try {
+        const products = await prisma.product.findMany({
+            orderBy: {
+                id: 'desc'
+            }
+        })
+        return products
+
+    } catch (error) {
+        console.log(">>>>>>error", error)
+        throw new Error("Error getting product")
+    }
+}
+
 export {
-    handleCreateProduct, handlePutUpdateProduct
+    handleCreateProduct, handlePutUpdateProduct, handleGetProduct
 }

@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { handleCreateProduct, handlePutUpdateProduct } from "../services/product.services";
+import { handleCreateProduct, handlePutUpdateProduct, handleGetProduct } from "../services/product.services";
 import { ProductSchema, TProductSchema } from "../validation/product.schema";
 
 const postCreateProduct = async (req: Request, res: Response) => {
@@ -79,7 +79,22 @@ const putUpdateProduct = async (req: Request, res: Response) => {
     }
 }
 
+const getProduct = async (req: Request, res: Response) => {
+    try {
+        const products = await handleGetProduct();
+        res.status(200).json({
+            message: "Get product successfully",
+            data: products
+        });
+    } catch (error) {
+        console.log("error", error);
+        res.status(500).json({
+            message: "Error getting product"
+        });
+    }
+}
+
 
 export {
-    postCreateProduct, putUpdateProduct
+    postCreateProduct, putUpdateProduct, getProduct
 }

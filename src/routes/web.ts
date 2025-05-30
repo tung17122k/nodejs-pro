@@ -1,7 +1,7 @@
 import express, { Express } from 'express';
 import { getHomePage, postCreateUser, putUpdateUser, getUserById, deleteUser, postCreateFile } from '../controllers/user.controller';
 import fileUploadMiddleware from '../middleware/multer';
-import { postCreateProduct, putUpdateProduct } from '../controllers/product.controller';
+import { postCreateProduct, putUpdateProduct, getProduct } from '../controllers/product.controller';
 
 
 
@@ -18,7 +18,9 @@ const webRoutes = (app: Express) => {
 
     router.post('/product', fileUploadMiddleware('image', 'images/product'), postCreateProduct);
 
-    router.put('/users/:id', fileUploadMiddleware('image', 'images/product'), putUpdateProduct);
+    router.put('/product/:id', fileUploadMiddleware('image', 'images/product'), putUpdateProduct);
+
+    router.get('/product', getProduct)
 
     app.use('/', router);
 };
