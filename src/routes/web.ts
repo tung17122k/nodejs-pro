@@ -2,6 +2,9 @@ import express, { Express } from 'express';
 import { getHomePage, postCreateUser, putUpdateUser, getUserById, deleteUser, postCreateFile, postRegister } from '../controllers/user.controller';
 import fileUploadMiddleware from '../middleware/multer';
 import { postCreateProduct, putUpdateProduct, getProduct, deleteProduct, getProductById } from '../controllers/product.controller';
+import { loginController } from '../controllers/auth.controller';
+
+
 
 
 
@@ -27,6 +30,8 @@ const webRoutes = (app: Express) => {
     router.get('/product/:id', getProductById)
 
     router.post('/register', postRegister);
+
+    router.post('/login', loginController)
 
     app.use('/', router);
 };

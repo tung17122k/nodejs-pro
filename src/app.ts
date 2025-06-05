@@ -4,6 +4,8 @@ import 'dotenv/config'
 import webRoutes from './routes/web'
 import getConnection from './config/database'
 import initDatabase from './config/seed'
+import passport, { session } from 'passport'
+import configPassportLocal from './middleware/passport.local'
 const app = express()
 
 
@@ -25,12 +27,23 @@ webRoutes(app);
 //config static files
 app.use(express.static("public"))
 
-
+app.use(passport.initialize());
 
 getConnection()
 
 // seeding database
 initDatabase()
+
+
+
+
+configPassportLocal();
+
+//handle 404
+app.use((req, res) => {
+    res.status(404).render('404', { title: '404 Not Found' });
+});
+
 app.listen(process.env.PORT, () => {
     console.log(`Example app listening on port ${process.env.PORT}`)
 })
