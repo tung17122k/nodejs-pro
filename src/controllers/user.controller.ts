@@ -4,6 +4,7 @@ import { RegisterSchema, TRegisterSchema } from "../validation/register.schema";
 
 const getHomePage = async (req: Request, res: Response) => {
     const users = await getAllUsers();
+    console.log("Current user from session:", req.user);
     res.status(200).json({
         data: users
     })

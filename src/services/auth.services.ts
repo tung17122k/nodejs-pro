@@ -3,6 +3,8 @@ import { comparePassword } from "./user.services"
 
 
 const handleLogin = async (username: string, password: string, callback: any) => {
+
+
     try {
         const user = await prisma.user.findUnique({
             where: {

@@ -41,11 +41,13 @@ const handleCreateUser = async (fullName: string, userName: string, address: str
 }
 
 const handleGetUserById = async (id: number) => {
-    return await prisma.user.findUnique({
+    const result = await prisma.user.findUnique({
         where: {
             id: Number(id)
         }
     })
+    console.log(">>>result", result);
+    return result
 }
 
 const handleUpdateUser = async (id: string, fullName: string, address: string, avatar: string, phone: string, roleId) => {

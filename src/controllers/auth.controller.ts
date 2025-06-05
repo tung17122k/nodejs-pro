@@ -10,7 +10,15 @@ const loginController = (req: Request, res: Response, next: NextFunction) => {
         if (!user) {
             return res.status(401).json({ message: info.message });
         }
-        return res.status(200).json({ message: "Login successful", user });
+
+        // luu vao session
+        req.login(user, (err) => {
+            if (err) {
+                return next(err);
+            }
+            return res.status(200).json({ message: "Login successful", user });
+        });
+
     })(req, res, next);
 };
 
