@@ -2,7 +2,8 @@ import express, { Express } from 'express';
 import { getHomePage, postCreateUser, putUpdateUser, getUserById, deleteUser, postCreateFile, postRegister } from '../controllers/user.controller';
 import fileUploadMiddleware from '../middleware/multer';
 import { postCreateProduct, putUpdateProduct, getProduct, deleteProduct, getProductById } from '../controllers/product.controller';
-import { loginController } from '../controllers/auth.controller';
+import { loginController, logOutController } from '../controllers/auth.controller';
+import { isLogined } from '../middleware/auth';
 
 
 
@@ -11,7 +12,7 @@ import { loginController } from '../controllers/auth.controller';
 const router = express.Router();
 
 const webRoutes = (app: Express) => {
-    router.get('/users', getHomePage)
+    router.get('/users', isLogined, getHomePage)
     router.get('/users/:id', getUserById)
     router.post('/users', fileUploadMiddleware('avatar'), postCreateUser);
     router.put('/users/:id', fileUploadMiddleware('avatar'), putUpdateUser);
@@ -32,6 +33,8 @@ const webRoutes = (app: Express) => {
     router.post('/register', postRegister);
 
     router.post('/login', loginController)
+
+    router.post('/logout', logOutController)
 
     app.use('/', router);
 };

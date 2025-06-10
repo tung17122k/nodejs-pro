@@ -22,4 +22,13 @@ const loginController = (req: Request, res: Response, next: NextFunction) => {
     })(req, res, next);
 };
 
-export { loginController };
+const logOutController = (req: Request, res: Response) => {
+    req.logout((err) => {
+        if (err) {
+            return res.status(500).json({ message: "Logout failed", error: err });
+        }
+        return res.status(200).json({ message: "Logout successful" });
+    });
+}
+
+export { loginController, logOutController };

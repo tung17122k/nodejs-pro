@@ -1,4 +1,4 @@
-// const express = require('express')
+/// <reference path="./types/index.d.ts" />
 import express from 'express'
 import 'dotenv/config'
 import webRoutes from './routes/web'
@@ -52,6 +52,12 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+
+// config global middleware
+app.use((req, res, next) => {
+    res.locals.user = req.user || null;
+    next();
+})
 
 
 // config routes

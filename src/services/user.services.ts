@@ -46,7 +46,7 @@ const handleGetUserById = async (id: number) => {
             id: Number(id)
         }
     })
-    console.log(">>>result", result);
+    // console.log(">>>result", result);
     return result
 }
 
