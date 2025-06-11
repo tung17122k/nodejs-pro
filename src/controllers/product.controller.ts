@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { handleCreateProduct, handlePutUpdateProduct, handleGetProduct, handleDeleteProduct, handleGetProductById } from "../services/product.services";
+import { handleCreateProduct, handlePutUpdateProduct, handleGetProduct, handleDeleteProduct, handleGetProductById, addProductToCart } from "../services/product.services";
 import { ProductSchema, TProductSchema } from "../validation/product.schema";
+import { getUserSumCard } from "../services/auth.services";
 
 const postCreateProduct = async (req: Request, res: Response) => {
     const { name, price, detailDesc, quantity, sold, factory, target } = req.body as TProductSchema;
@@ -136,7 +137,30 @@ const getProductById = async (req: Request, res: Response) => {
     }
 }
 
+const postAddProductToCart = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    console.log("checkid", id);
+
+    const user = req.user;
+
+    if (!user) {
+        res.status(401).json({ message: "Unauthorized user" });
+    }
+    try {
+        const result = await addProductToCart(1, +id, user);
+        const updatedSum = await getUserSumCard(user.id);
+        req.user.sumCart = updatedSum
+
+        res.status(200).json({ message: "Product added to cart", sumCart: updatedSum });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+
+
+}
+
 
 export {
-    postCreateProduct, putUpdateProduct, getProduct, deleteProduct, getProductById
+    postCreateProduct, putUpdateProduct, getProduct, deleteProduct, getProductById, postAddProductToCart
 }

@@ -1,7 +1,7 @@
 import express, { Express } from 'express';
 import { getHomePage, postCreateUser, putUpdateUser, getUserById, deleteUser, postCreateFile, postRegister } from '../controllers/user.controller';
 import fileUploadMiddleware from '../middleware/multer';
-import { postCreateProduct, putUpdateProduct, getProduct, deleteProduct, getProductById } from '../controllers/product.controller';
+import { postCreateProduct, putUpdateProduct, getProduct, deleteProduct, getProductById, postAddProductToCart } from '../controllers/product.controller';
 import { loginController, logOutController } from '../controllers/auth.controller';
 import { isLogined } from '../middleware/auth';
 
@@ -35,6 +35,8 @@ const webRoutes = (app: Express) => {
     router.post('/login', loginController)
 
     router.post('/logout', logOutController)
+
+    router.post('/add-to-cart/:id', postAddProductToCart)
 
     app.use('/', router);
 };

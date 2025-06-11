@@ -47,4 +47,14 @@ const handleGetUserWithRoleById = async (id: number) => {
     return result
 }
 
-export { handleLogin, handleGetUserWithRoleById }
+const getUserSumCard = async (id: number) => {
+    const result = await prisma.cart.findUnique({
+        where: {
+            userId: Number(id),
+        },
+    })
+    return result?.sum ?? 0
+}
+
+
+export { handleLogin, handleGetUserWithRoleById, getUserSumCard }

@@ -1,6 +1,6 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import { handleGetUserWithRoleById, handleLogin } from "../services/auth.services";
+import { getUserSumCard, handleGetUserWithRoleById, handleLogin } from "../services/auth.services";
 
 
 
@@ -27,7 +27,12 @@ const configPassportLocal = () => {
         const { id } = user;
         // query user from database
         user = await handleGetUserWithRoleById(id);
-        return cb(null, { ...user });
+
+        const sumCart = await getUserSumCard(id)
+        console.log(">>>check sumCart", sumCart);
+
+
+        return cb(null, { ...user, sumCart: sumCart });
     });
 }
 export default configPassportLocal;
