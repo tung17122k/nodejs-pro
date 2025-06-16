@@ -8,8 +8,6 @@ import { getCartDetail, deleteProductInCart, putUpdateCartDetailArray } from '..
 
 
 
-
-
 const router = express.Router();
 
 const webRoutes = (app: Express) => {
@@ -28,6 +26,7 @@ const webRoutes = (app: Express) => {
     router.get('/product', getProduct)
 
     router.delete('/product/:id', deleteProduct);
+
 
     router.get('/product/:id', getProductById)
 
