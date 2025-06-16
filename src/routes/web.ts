@@ -4,6 +4,7 @@ import fileUploadMiddleware from '../middleware/multer';
 import { postCreateProduct, putUpdateProduct, getProduct, deleteProduct, getProductById, postAddProductToCart } from '../controllers/product.controller';
 import { loginController, logOutController } from '../controllers/auth.controller';
 import { isLogined } from '../middleware/auth';
+import { getCartDetail, deleteProductInCart } from '../controllers/cart.controller';
 
 
 
@@ -37,6 +38,10 @@ const webRoutes = (app: Express) => {
     router.post('/logout', logOutController)
 
     router.post('/add-to-cart/:id', postAddProductToCart)
+
+    router.get('/cart-detail/', getCartDetail)
+
+    router.delete('/product-in-cart/:id', deleteProductInCart)
 
     app.use('/', router);
 };
