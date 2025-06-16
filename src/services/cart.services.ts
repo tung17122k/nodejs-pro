@@ -69,4 +69,46 @@ const deleteProductInCartService = async (cartDetailId: number, userId: number, 
 
 }
 
-export { getCartDetailService, deleteProductInCartService };
+
+const putUpdateCartDetailService = async (data: { id: number; quantity: string }[], userId: number) => {
+
+
+    if (data.length === 0) {
+        return {
+            updated: 0,
+            sum: 0,
+            message: "No cart details to update"
+        };
+    }
+
+    const sum = data.reduce((total, item) => total + Number(item.quantity), 0);
+
+    for (let i = 0; i < data.length; i++) {
+        await prisma.cartDetail.update({
+            where: {
+                id: data[i].id
+            },
+            data: {
+                quantity: +data[i].quantity
+            }
+        });
+    }
+
+    await prisma.cart.update({
+        where: {
+            userId: userId
+        },
+        data: {
+            sum: sum
+        }
+    })
+
+    return {
+        updated: data.length,
+        sum: sum,
+        userId: userId,
+        message: "Cart detail updated successfully"
+    };
+}
+
+export { getCartDetailService, deleteProductInCartService, putUpdateCartDetailService };

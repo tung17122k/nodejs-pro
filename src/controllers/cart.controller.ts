@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { getCartDetailService, deleteProductInCartService } from "../services/cart.services";
+import { getCartDetailService, deleteProductInCartService, putUpdateCartDetailService } from "../services/cart.services";
 
 
 const getCartDetail = async (req: Request, res: Response) => {
@@ -32,5 +32,20 @@ const deleteProductInCart = async (req: Request, res: Response) => {
     res.status(200).json({ message: "Delete Product in Cart successfully", data: result });
 }
 
+const putUpdateCartDetailArray = async (req: Request, res: Response) => {
+    const userId = req.user?.id;
 
-export { getCartDetail, deleteProductInCart };
+    const currentCartDetail: { id: number; quantity: string }[] = req.body?.cartDetails ?? []
+
+    console.log(">>>>check currentCartDetaill", currentCartDetail);
+
+    await putUpdateCartDetailService(currentCartDetail, userId)
+
+    res.status(200).json({ message: "Update cart detail successfully" });
+
+
+
+}
+
+
+export { getCartDetail, deleteProductInCart, putUpdateCartDetailArray };
