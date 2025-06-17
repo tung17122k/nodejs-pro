@@ -5,6 +5,7 @@ import { postCreateProduct, putUpdateProduct, getProduct, deleteProduct, getProd
 import { loginController, logOutController } from '../controllers/auth.controller';
 import { isLogined } from '../middleware/auth';
 import { getCartDetail, deleteProductInCart, putUpdateCartDetailArray } from '../controllers/cart.controller';
+import { postCheckout } from '../controllers/order.controllder';
 
 
 
@@ -44,6 +45,8 @@ const webRoutes = (app: Express) => {
     router.put('/cart-detail', putUpdateCartDetailArray)
 
     router.delete('/product-in-cart/:id', deleteProductInCart)
+
+    router.post('/checkout', postCheckout)
 
     app.use('/', router);
 };
