@@ -5,7 +5,7 @@ import { postCreateProduct, putUpdateProduct, getProduct, deleteProduct, getProd
 import { loginController, logOutController } from '../controllers/auth.controller';
 import { isLogined } from '../middleware/auth';
 import { getCartDetail, deleteProductInCart, putUpdateCartDetailArray } from '../controllers/cart.controller';
-import { postCheckout } from '../controllers/order.controllder';
+import { postCheckout, getOrderHistory } from '../controllers/order.controllder';
 
 
 
@@ -46,6 +46,8 @@ const webRoutes = (app: Express) => {
     router.delete('/product-in-cart/:id', deleteProductInCart)
 
     router.post('/checkout', postCheckout)
+
+    router.get('/order-history', isLogined, getOrderHistory)
 
     app.use('/', router);
 };

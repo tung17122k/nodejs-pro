@@ -54,6 +54,30 @@ const handlePlaceOrder = async (userId: number, receiverName: string, receiverAd
 
 }
 
+
+const getOrderHistoryService = async (userId: number) => {
+
+    const result = await prisma.order.findMany({
+        where: {
+            userId
+        },
+        include: {
+            orderDetails: {
+                include: {
+                    product: true
+                }
+            }
+        }
+    })
+
+    return result
+
+
+
+
+
+}
+
 export {
-    handlePlaceOrder
+    handlePlaceOrder, getOrderHistoryService
 }

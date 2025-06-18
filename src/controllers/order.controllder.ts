@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { handlePlaceOrder } from "../services/order.services";
+import { handlePlaceOrder, getOrderHistoryService } from "../services/order.services";
 
 
 const postCheckout = async (req: Request, res: Response) => {
@@ -21,4 +21,18 @@ const postCheckout = async (req: Request, res: Response) => {
 
 }
 
-export { postCheckout };
+const getOrderHistory = async (req: Request, res: Response) => {
+    const userId = req?.user.id
+
+    const result = await getOrderHistoryService(userId)
+
+    if (result) {
+        res.status(200).json({
+            message: "Lấy lịch sử đơn hàng thành công",
+            data: result
+        })
+    }
+}
+
+
+export { postCheckout, getOrderHistory };
