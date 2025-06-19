@@ -37,11 +37,11 @@ const putUpdateCartDetailArray = async (req: Request, res: Response) => {
 
     const currentCartDetail: { id: number; quantity: string }[] = req.body?.cartDetails ?? []
 
-    console.log(">>>>check currentCartDetaill", currentCartDetail);
 
-    await putUpdateCartDetailService(currentCartDetail, userId)
 
-    res.status(200).json({ message: "Update cart detail successfully" });
+    const result = await putUpdateCartDetailService(currentCartDetail, userId)
+
+    res.status(200).json({ message: "Update cart detail successfully", data: result });
 
 
 

@@ -94,6 +94,7 @@ const putUpdateCartDetailService = async (data: { id: number; quantity: string }
         });
     }
 
+
     await prisma.cart.update({
         where: {
             userId: userId
@@ -103,11 +104,25 @@ const putUpdateCartDetailService = async (data: { id: number; quantity: string }
         }
     })
 
+    const cart = await prisma.cart.findUnique({
+        where: {
+            userId
+        },
+        include: {
+            cartDetails: true
+        }
+    })
+
+    const totalPrice = cart.cartDetails.reduce((sum, item) => {
+        return sum + item.price * item.quantity;
+    }, 0);
+
     return {
         updated: data.length,
         sum: sum,
         userId: userId,
-        message: "Cart detail updated successfully"
+        message: "Cart detail updated successfully",
+        totalPrice: totalPrice
     };
 }
 
