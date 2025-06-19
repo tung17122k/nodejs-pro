@@ -3,22 +3,29 @@ import { handlePlaceOrder, getOrderHistoryService } from "../services/order.serv
 
 
 const postCheckout = async (req: Request, res: Response) => {
+    try {
+        const userId = req?.user.id
+        const { receiverName, receiverAddress, receiverPhone, totalPrice } = req.body
+        const result = await handlePlaceOrder(userId, receiverName, receiverAddress, receiverPhone, +totalPrice)
 
-    const userId = req?.user.id
-    const { receiverName, receiverAddress, receiverPhone, totalPrice } = req.body
-    const result = await handlePlaceOrder(userId, receiverName, receiverAddress, receiverPhone, +totalPrice)
+        if (result) {
+            res.status(201).json({
+                message: "Đặt hàng thành công",
+                data: result
+            })
+        } else {
+            res.status(400).json({
+                message: "Đặt hàng thất bại"
+            })
+        }
+        console.log("result", result);
 
-    if (result) {
-        res.status(201).json({
-            message: "Đặt hàng thành công",
-            data: result
-        })
-    } else {
-        res.status(400).json({
-            message: "Đặt hàng thất bại"
-        })
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+
     }
-
 }
 
 const getOrderHistory = async (req: Request, res: Response) => {

@@ -21,8 +21,9 @@ const handleLogin = async (username: string, password: string, callback: any) =>
             return callback(null, false, { message: `Incorrect password` });
         }
 
+        const { password: _removedPassword, ...safeUser } = user;
 
-        return callback(null, user, { message: "Login successful" });
+        return callback(null, safeUser, { message: "Login successful" });
     } catch (error) {
         // Handle error
         callback(error, false, { message: "An error occurred during login" });
